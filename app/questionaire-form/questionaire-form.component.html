@@ -1,0 +1,89 @@
+<div class="header color center">
+   <h1 class="text-center"> Questionnaire</h1>
+</div>
+<section>
+   <form id="form" [formGroup]="questioaireForm" (ngSubmit) = "onClickSubmit(questioaireForm.value)" >
+   <div>
+      <div  *ngFor="let control of dynamicFormArray?.item">
+         <div [ngSwitch]="control.type">
+            <div class="row" *ngSwitchCase="'string'">
+               <div class="col-md-6">
+                  <label class="col-form-label">{{control.text}}</label>
+               </div>
+               <div class="col-md-6">
+                  <input type="text" formControlName="{{control.text}}" class="form-control">
+                  <div *ngIf="questioaireForm.get(control.text)?.dirty || questioaireForm.get(control.text)?.touched">
+                     <small class="validation" *ngIf="!questioaireForm.get(control.text)?.valid">
+                     Field is Required
+                     </small>
+                  </div>
+               </div>
+            </div>
+            <div class="row" *ngSwitchCase="'boolean'">
+               <div class="col-md-6">
+                  <label class="col-form-label">{{control.text}}</label>
+               </div>
+               <div class="col-md-6">
+                  <label>
+                  <input type="radio" class="form-check-input" formControlName="{{control.text}}" [value]="true" name="{{control.text}}">
+                  <span style="margin: 0 10px;"> Yes  </span>
+                  </label>
+                  <label>
+                  <input type="radio" class="form-check-input" formControlName="{{control.text}}" [value]="false" name="{{control.text}}">
+                  <span style="margin: 0 10px;">No  </span>
+                  </label>
+                  <div *ngIf="questioaireForm.get(control.text)?.dirty || questioaireForm.get(control.text)?.touched">
+                     <small class="validation" *ngIf="!questioaireForm.get(control.text)?.valid">
+                     Field is Required
+                     </small>
+                  </div>
+               </div>
+            </div>
+            <div class="row" *ngSwitchCase="'choice'">
+               <div class="col-md-6">
+                  <label class="col-form-label">{{control.text}}</label>
+               </div>
+               <div class="col-md-6">
+                  <select formControlName="{{control.text}}" class="form-control">
+                     <!-- <option value="-1">Select</option> -->
+                     <option *ngFor="let op of control.option" value="{{op.valueCoding.code}}">
+                        {{op.valueCoding.display}}
+                     </option>
+                  </select>
+                  <div *ngIf="questioaireForm.get(control.text)?.dirty || questioaireForm.get(control.text)?.touched">
+                     <small class="validation" *ngIf="!questioaireForm.get(control.text)?.valid">
+                     Field is Required
+                     </small>
+                  </div>
+               </div>
+            </div>
+            <div class="row" *ngSwitchCase="'date'">
+               <div class="col-md-6">
+                  <label class="col-form-label">{{control.text}}</label>
+               </div>
+               <div class="col-md-6">
+                  <input type="date" formControlName="{{control.text}}" class="form-control">
+                  <div *ngIf="questioaireForm.get(control.text)?.dirty || questioaireForm.get(control.text)?.touched">
+                     <small  class="validation" *ngIf="!questioaireForm.get(control.text)?.valid">
+                     Field is Required
+                     </small>
+                  </div>
+               </div>
+            </div>
+            <br>
+         </div>
+      </div>
+      <div *ngIf="loadSubmit" class="row">
+         <div class="col-md-6"></div>
+         <div class="col-md-6">
+            <button type="submit" class="btn btn-primary float-end" [disabled]="!questioaireForm.valid">Submit</button>
+         </div>
+      </div>
+   </div>
+   </form>
+   <div class="container-md">
+      <div  class="row">
+         <pre *ngIf="showArray">{{questioaireForm.value | json }}</pre>
+      </div>
+   </div>
+</section>
